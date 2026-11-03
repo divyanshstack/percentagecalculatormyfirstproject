@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0d12">
+  <meta name="description" content="JEE PHODENGE BY DIVYANSH — a personal JEE 2028 study tracker for focused self-study.">
+  <title>JEE PHODENGE · JEE 2028 Tracker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.118.0/dist/umd/supabase.js" defer></script>
+  <script src="config.js" defer></script>
+  <script src="resources.js" defer></script>
+  <script src="script.js" defer></script>
+  <script src="auth.js" defer></script>
+</head>
+<body>
+  <section class="auth-view" id="auth-view" aria-labelledby="auth-heading">
+    <div class="auth-brand">
+      <a class="brand" href="/login" aria-label="JEE PHODENGE by Divyansh home">
+        <span class="brand-mark">JP</span>
+        <span class="brand-copy"><strong>JEE <span>PHODENGE</span></strong><small>BY DIVYANSH</small><span class="brand-edition">STUDY WITH DIVYANSH · JEE 2028</span></span>
+      </a>
+      <span class="auth-brand-caption">Sapna IIT Ka, Junoon JEE Phodne Ka!</span>
+    </div>
+    <div class="auth-card">
+      <div class="auth-orbit" aria-hidden="true">✦</div>
+      <div id="auth-loading" class="auth-message" role="status">Connecting to your secure study space…</div>
+      <div id="backend-setup-notice" class="backend-setup-notice hidden">
+        <strong>Connect your Supabase project to enable accounts.</strong>
+        <span>Set your Supabase project URL and public anon key in <code>config.js</code>, then run the database migration in <code>supabase/migrations/</code>. No fake sign-in is used.</span>
+      </div>
+      <div id="auth-forms" class="hidden">
+        <p class="eyebrow accent-text">STUDY WITH DIVYANSH</p>
+        <h1 id="auth-heading">Welcome back</h1>
+        <p class="auth-description" id="auth-description">Sign in to pick up where you left off.</p>
+        <p class="auth-message hidden" id="auth-message" role="status" aria-live="polite"></p>
+        <form class="auth-form" id="login-form" data-auth-form="login">
+          <label for="login-email">Email address</label>
+          <input id="login-email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <label for="login-password">Password</label>
+          <input id="login-password" type="password" autocomplete="current-password" minlength="8" placeholder="Your password" required>
+          <button class="button button-primary auth-submit" type="submit">Sign in <span>↗</span></button>
+          <a class="auth-inline-link" href="/forgot-password" data-route="/forgot-password">Forgot password?</a>
+        </form>
+        <form class="auth-form hidden" id="signup-form" data-auth-form="signup">
+          <label for="signup-name">Your name</label>
+          <input id="signup-name" type="text" autocomplete="name" maxlength="80" placeholder="Divyansh" required>
+          <label for="signup-email">Email address</label>
+          <input id="signup-email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <label for="signup-password">Create a password</label>
+          <input id="signup-password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required>
+          <button class="button button-primary auth-submit" type="submit">Create account <span>↗</span></button>
+        </form>
+        <form class="auth-form hidden" id="forgot-form" data-auth-form="forgot">
+          <label for="forgot-email">Email address</label>
+          <input id="forgot-email" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <button class="button button-primary auth-submit" type="submit">Send reset link <span>↗</span></button>
+        </form>
+        <form class="auth-form hidden" id="reset-form" data-auth-form="reset">
+          <label for="reset-password">New password</label>
+          <input id="reset-password" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required>
+          <label for="reset-password-confirm">Confirm new password</label>
+          <input id="reset-password-confirm" type="password" autocomplete="new-password" minlength="8" placeholder="Repeat your password" required>
+          <button class="button button-primary auth-submit" type="submit">Update password <span>✓</span></button>
+        </form>
+        <p class="auth-switch" id="auth-switch"></p>
+      </div>
+      <div class="auth-public-links">
+        <a href="/resources" data-route="/resources">Free study material <span>↗</span></a>
+        <a href="/study-with-divyansh" data-route="/study-with-divyansh">Study With Divyansh <span>↗</span></a>
+      </div>
+      <p class="auth-footer">Your preparation stays yours. Secure sign-in by Supabase.</p>
+    </div>
+  </section>
+
+  <div class="app-shell hidden" id="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="/dashboard" data-route="/dashboard" aria-label="JEE PHODENGE by Divyansh home">
+      <span class="brand-mark">JP</span>
+      <span class="brand-copy"><strong>JEE <span>PHODENGE</span></strong><small>BY DIVYANSH</small><span class="brand-edition">JEE 2028 · STUDY TRACKER</span></span>
+    </a>
+    <p class="nav-label">WORKSPACE</p>
+    <nav class="side-nav" aria-label="Main navigation">
+      <a class="nav-link" href="/dashboard" data-route="/dashboard"><span class="nav-icon">⌂</span>Dashboard</a>
+      <a class="nav-link" href="/subjects" data-route="/subjects"><span class="nav-icon">◫</span>Subject tracker</a>
+      <a class="nav-link" href="/study" data-route="/study"><span class="nav-icon">◷</span>Study sessions</a>
+      <a class="nav-link" href="/analysis" data-route="/analysis"><span class="nav-icon">▥</span>Weekly analysis</a>
+      <a class="nav-link" href="/tests" data-route="/tests"><span class="nav-icon">✳</span>Mock tests</a>
+      <a class="nav-link" href="/todo" data-route="/todo"><span class="nav-icon">✓</span>To-do list</a>
+      <a class="nav-link" href="/resources" data-route="/resources"><span class="nav-icon">▤</span>Free study material</a>
+      <a class="nav-link" href="/study-with-divyansh" data-route="/study-with-divyansh"><span class="nav-icon">✦</span>Study With Divyansh</a>
+      <a class="nav-link" href="/profile" data-route="/profile"><span class="nav-icon">◎</span>My profile</a>
+    </nav>
+    <div class="sidebar-bottom">
+      <div class="sidebar-tip">
+        <span class="tip-icon">✦</span>
+        <strong>Small steps, big scores.</strong>
+        <p>Consistency beats last-minute cramming. Show up today.</p>
+      </div>
+      <div class="sidebar-student">
+        <span class="avatar" id="sidebar-avatar">D</span>
+        <span><strong id="sidebar-user-name">Student</strong><small id="sidebar-user-email">Self-study · JEE 2028</small></span>
+        <button class="signout-button" id="signout-button" type="button" aria-label="Sign out" title="Sign out">↗</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div class="topbar-brand-area">
+        <a class="header-brand" href="/dashboard" data-route="/dashboard" aria-label="JEE PHODENGE by Divyansh home">
+          <span class="header-brand-mark">JP</span>
+          <span class="header-brand-copy"><strong>JEE PHODENGE</strong><small>BY DIVYANSH</small></span>
+        </a>
+        <span class="header-divider" aria-hidden="true"></span>
+        <div class="topbar-page-title">
+          <p class="eyebrow">JEE 2028 · SELF-STUDY TRACKER</p>
+          <h1 id="page-title">Dashboard</h1>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <span class="date-pill"><span class="date-dot"></span><span id="header-date"></span></span>
+        <button class="sync-status" id="sync-status" type="button" aria-label="Cloud sync status; click to retry">Cloud sync</button>
+        <a class="top-avatar profile-avatar" href="/profile" data-route="/profile" id="profile-avatar" aria-label="My profile">D</a>
+      </div>
+    </header>
+
+    <section class="page-section route-section" id="dashboard">
+      <div class="welcome-row">
+        <div>
+          <p class="eyebrow accent-text brand-tagline">Sapna IIT Ka, Junoon JEE Phodne Ka!</p>
+          <h2>Your JEE 2028<br><span>starts here.</span></h2>
+          <p class="welcome-copy">A little progress each day adds up to remarkable results.</p>
+        </div>
+        <div class="countdown-card">
+          <span class="countdown-orbit">✳</span>
+          <div><span class="eyebrow">JEE 2028 · TARGET DATE ESTIMATE</span>
+            <strong><span id="countdown-days">—</span><small>days to go</small></strong>
+            <span class="countdown-date">April 1, 2028</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid">
+        <article class="stat-card stat-primary">
+          <div class="stat-top"><span>Today's study</span><span class="stat-icon">◷</span></div>
+          <div class="stat-number"><span id="today-hours">0</span><small>hrs</small></div>
+          <div class="stat-foot"><span id="today-minutes">0 min studied today</span><span class="stat-trend">TODAY</span></div>
+          <div class="mini-progress"><span id="today-progress-bar"></span></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Total study time</span><span class="stat-icon">◴</span></div>
+          <div class="stat-number"><span id="total-hours">0</span><small>hrs</small></div>
+          <div class="stat-foot"><span>Across all your sessions</span><span class="soft-dot"></span></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Daily target</span><span class="stat-icon">◎</span></div>
+          <div class="target-control">
+            <input id="daily-target" type="number" min="0.5" max="24" step="0.5" aria-label="Daily study target in hours">
+            <span>hours</span>
+          </div>
+          <div class="stat-foot"><span>Make it a daily habit</span><span class="soft-dot"></span></div>
+        </article>
+        <article class="stat-card">
+          <div class="stat-top"><span>Preparation progress</span><span class="stat-icon">↗</span></div>
+          <div class="stat-number"><span id="prep-progress">0</span><small>%</small></div>
+          <div class="stat-foot"><span id="chapters-summary">0 of 42 chapters complete</span><span class="soft-dot"></span></div>
+          <div class="mini-progress"><span id="prep-progress-bar"></span></div>
+        </article>
+      </div>
+
+      <div class="dashboard-grid">
+        <article class="panel goal-panel">
+          <div class="panel-heading"><div><p class="eyebrow">DAILY FOCUS</p><h3>Today's target</h3></div><span class="heading-icon">◎</span></div>
+          <div class="goal-main"><div class="goal-ring" id="goal-ring"><div><strong id="productivity">0%</strong><span>complete</span></div></div>
+            <div class="goal-copy"><strong id="goal-message">Ready when you are</strong><p id="goal-detail">Log a study session to get started.</p><span class="goal-hours"><b id="goal-studied">0</b> / <span id="goal-target">8</span> hours</span></div>
+          </div>
+          <a class="text-link" href="/study" data-route="/study">Log a study session <span>↗</span></a>
+        </article>
+        <article class="panel streak-panel">
+          <div class="panel-heading"><div><p class="eyebrow">KEEP THE MOMENTUM</p><h3>Your study streak</h3></div><span class="streak-flame">♨</span></div>
+          <div class="streak-numbers"><div><strong id="current-streak">0</strong><span>current streak <i>days</i></span></div><div class="streak-divider"></div><div><strong id="longest-streak">0</strong><span>longest streak <i>days</i></span></div></div>
+          <div class="streak-week" id="streak-week" aria-label="This week's study days"></div>
+          <div class="streak-note"><span class="check-mark">✓</span><span id="target-indicator">Today's target is waiting for you</span></div>
+        </article>
+      </div>
+
+      <article class="panel quick-panel">
+        <div class="panel-heading"><div><p class="eyebrow">YOUR JOURNEY</p><h3>Pick up where you left off</h3></div><a class="text-link" href="/subjects" data-route="/subjects">All chapters <span>↗</span></a></div>
+        <div class="quick-subjects" id="quick-subjects"></div>
+      </article>
+    </section>
+
+    <section class="page-section route-section" id="subjects">
+      <div class="section-intro"><div><p class="eyebrow accent-text">THE SYLLABUS</p><h2>Subject tracker</h2><p>Make every chapter count. Update your progress as you learn.</p></div><span class="section-count" id="subject-count">42 CHAPTERS</span></div>
+      <div class="subject-tabs" role="tablist" aria-label="Filter chapters by subject">
+        <button class="subject-tab active" data-subject-filter="All" role="tab" aria-selected="true">All subjects <span id="all-count">42</span></button>
+        <button class="subject-tab" data-subject-filter="Physics" role="tab" aria-selected="false">Physics <span>14</span></button>
+        <button class="subject-tab" data-subject-filter="Chemistry" role="tab" aria-selected="false">Chemistry <span>14</span></button>
+        <button class="subject-tab" data-subject-filter="Mathematics" role="tab" aria-selected="false">Mathematics <span>14</span></button>
+      </div>
+      <div id="subject-groups"></div>
+    </section>
+
+    <section class="page-section route-section" id="study">
+      <div class="section-intro"><div><p class="eyebrow accent-text">SHOW UP, PUT IN THE WORK</p><h2>Study sessions</h2><p>Keep a clear record of what you study and when.</p></div></div>
+      <div class="study-layout">
+        <article class="panel session-form-panel">
+          <div class="panel-heading"><div><p class="eyebrow">SESSION DETAILS</p><h3 id="session-form-title">Log a study session</h3></div><span class="heading-icon">＋</span></div>
+          <form id="session-form">
+            <label for="session-date">Study date</label><input id="session-date" type="date" required>
+            <label for="session-subject">Subject</label><select id="session-subject" required></select>
+            <label for="session-chapter">Chapter</label><select id="session-chapter" required></select>
+            <label for="session-duration">Duration <span class="label-hint">in hours</span></label><input id="session-duration" type="number" min="0.1" max="24" step="0.1" placeholder="e.g. 1.5" required>
+            <div class="form-actions"><button class="button button-primary" type="submit" id="session-submit">Add session <span>＋</span></button><button class="button button-quiet hidden" type="button" id="session-cancel">Cancel</button></div>
+          </form>
+          <p class="form-hint">Tip: enter 1.5 for 1 hour and 30 minutes.</p>
+        </article>
+        <article class="panel history-panel">
+          <div class="panel-heading"><div><p class="eyebrow">YOUR RECENT WORK</p><h3>Study history</h3></div><span class="history-total" id="history-count">0 sessions</span></div>
+          <div class="session-list" id="session-list"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page-section route-section" id="analysis">
+      <div class="section-intro"><div><p class="eyebrow accent-text">REFLECT & RESET</p><h2>Weekly analysis</h2><p>See how your effort adds up, one day at a time.</p></div><span class="week-range" id="week-range"></span></div>
+      <div class="analysis-stats stats-grid">
+        <article class="stat-card"><div class="stat-top"><span>This week's study</span><span class="stat-icon">◷</span></div><div class="stat-number"><span id="weekly-hours">0</span><small>hrs</small></div><div class="stat-foot"><span id="weekly-target-label">0 of 56 target hours</span><span class="soft-dot"></span></div><div class="mini-progress"><span id="weekly-progress-bar"></span></div></article>
+        <article class="stat-card"><div class="stat-top"><span>Daily average</span><span class="stat-icon">↗</span></div><div class="stat-number"><span id="weekly-average">0</span><small>hrs</small></div><div class="stat-foot"><span>Per day this week</span><span class="soft-dot"></span></div></article>
+        <article class="stat-card"><div class="stat-top"><span>Days studied</span><span class="stat-icon">✳</span></div><div class="stat-number"><span id="weekly-days">0</span><small>/ 7</small></div><div class="stat-foot"><span>Days with a study session</span><span class="soft-dot"></span></div></article>
+      </div>
+      <div class="analysis-grid">
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">DAILY PRODUCTIVITY</p><h3>Target completion</h3></div><span class="chart-legend"><i></i> Target met</span></div><div class="chart-wrap" id="weekly-chart"></div></article>
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">SUBJECT BREAKDOWN</p><h3>Where time went</h3></div></div><div class="subject-time-list" id="subject-time-list"></div></article>
+      </div>
+      <article class="panel weekly-target-panel"><div class="panel-heading"><div><p class="eyebrow">WEEKLY TARGET</p><h3>Plan vs. actual</h3></div><span class="target-badge" id="weekly-target-badge">0%</span></div><div class="weekly-target-copy"><span><strong id="weekly-actual">0</strong> hours studied</span><span><input id="weekly-target-input" type="number" min="1" max="168" step="1" aria-label="Weekly target in hours"> hours target</span></div><div class="weekly-track"><span id="weekly-target-fill"></span></div><p class="weekly-footnote" id="weekly-footnote">Set a target and build your weekly rhythm.</p></article>
+    </section>
+
+    <section class="page-section route-section" id="tests">
+      <div class="section-intro"><div><p class="eyebrow accent-text">PRACTICE UNDER PRESSURE</p><h2>Mock tests</h2><p>Track every attempt. Learn from each score and keep improving.</p></div></div>
+      <div class="test-layout">
+        <article class="panel test-form-panel">
+          <div class="panel-heading"><div><p class="eyebrow">RECORD AN ATTEMPT</p><h3 id="test-form-title">Add a mock test</h3></div><span class="heading-icon">✳</span></div>
+          <form id="test-form">
+            <label for="test-date">Test date</label><input id="test-date" type="date" required>
+            <div class="marks-grid"><div><label for="physics-marks">Physics <span>/ 100</span></label><input id="physics-marks" type="number" min="0" max="100" step="1" placeholder="0" required></div><div><label for="chemistry-marks">Chemistry <span>/ 100</span></label><input id="chemistry-marks" type="number" min="0" max="100" step="1" placeholder="0" required></div><div><label for="maths-marks">Maths <span>/ 100</span></label><input id="maths-marks" type="number" min="0" max="100" step="1" placeholder="0" required></div></div>
+            <div class="test-total-preview"><span>Total score</span><strong id="test-total-preview">0 <small>/ 300</small></strong></div>
+            <div class="form-actions"><button class="button button-primary" type="submit" id="test-submit">Save test <span>↗</span></button><button class="button button-quiet hidden" type="button" id="test-cancel">Cancel</button></div>
+          </form>
+        </article>
+        <article class="panel score-chart-panel"><div class="panel-heading"><div><p class="eyebrow">YOUR PROGRESS</p><h3>Score improvement</h3></div><span class="history-total" id="test-count">0 tests</span></div><div class="chart-wrap score-chart-wrap" id="score-chart"></div><div class="score-summary" id="score-summary"></div></article>
+      </div>
+      <article class="panel test-history-panel"><div class="panel-heading"><div><p class="eyebrow">ALL ATTEMPTS</p><h3>Test history</h3></div></div><div class="table-wrap"><table><thead><tr><th>DATE</th><th>PHYSICS</th><th>CHEMISTRY</th><th>MATHS</th><th>TOTAL</th><th></th></tr></thead><tbody id="test-table-body"></tbody></table></div></article>
+    </section>
+
+    <section class="page-section route-section" id="todo">
+      <div class="section-intro"><div><p class="eyebrow accent-text">PLAN YOUR NEXT WIN</p><h2>Daily to-do list</h2><p>Turn today's study plan into clear, manageable steps.</p></div></div>
+      <div class="task-progress-panel panel">
+        <div><p class="eyebrow">TODAY'S COMPLETION</p><strong id="task-completion">0%</strong></div>
+        <div class="task-progress-track"><span id="task-progress-fill"></span></div>
+        <span id="task-progress-caption">0 of 0 tasks completed</span>
+      </div>
+      <div class="task-layout">
+        <article class="panel task-form-panel">
+          <div class="panel-heading"><div><p class="eyebrow">MAKE A PLAN</p><h3 id="task-form-title">Add a task</h3></div><span class="heading-icon">＋</span></div>
+          <form id="task-form">
+            <label for="task-title">Task</label><input id="task-title" type="text" maxlength="140" placeholder="e.g. Revise Newton's laws" required>
+            <label for="task-deadline">Deadline</label><input id="task-deadline" type="date">
+            <label for="task-subject">Subject</label><select id="task-subject"><option value="General">General</option><option>Physics</option><option>Chemistry</option><option>Mathematics</option></select>
+            <label for="task-priority">Priority</label><select id="task-priority"><option value="Medium">Medium</option><option value="High">High</option><option value="Low">Low</option></select>
+            <div class="form-actions"><button class="button button-primary" type="submit" id="task-submit">Add task <span>＋</span></button><button class="button button-quiet hidden" type="button" id="task-cancel">Cancel</button></div>
+          </form>
+        </article>
+        <article class="panel task-list-panel">
+          <div class="panel-heading"><div><p class="eyebrow">YOUR ACTIONS</p><h3>Stay on track</h3></div></div>
+          <div class="task-filters" role="tablist" aria-label="Filter tasks">
+            <button type="button" class="task-filter active" data-task-filter="today" role="tab" aria-selected="true">Today <span id="today-task-count">0</span></button>
+            <button type="button" class="task-filter" data-task-filter="pending" role="tab" aria-selected="false">Pending <span id="pending-task-count">0</span></button>
+            <button type="button" class="task-filter" data-task-filter="completed" role="tab" aria-selected="false">Completed <span id="completed-task-count">0</span></button>
+          </div>
+          <div class="task-list" id="task-list"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="page-section route-section" id="resources">
+      <div class="section-intro"><div><p class="eyebrow accent-text">LEARN WITHOUT THE PAYWALL</p><h2>Free study material</h2><p>Hand-picked free resources from official education platforms and open publishers.</p></div><span class="section-count">FREE · LEGITIMATE SOURCES</span></div>
+      <div class="resource-notice">Resources link to official, openly available sources. Availability and terms are managed by each publisher.</div>
+      <div class="resource-grid" id="resource-grid"></div>
+    </section>
+
+    <section class="page-section route-section" id="study-with-divyansh">
+      <div class="section-intro"><div><p class="eyebrow accent-text">SAPNA IIT KA, JUNOON JEE PHODNE KA!</p><h2>Study With Divyansh</h2><p>A growing corner for practical preparation advice and free learning resources.</p></div></div>
+      <div class="study-brand-hero panel"><span class="study-brand-icon">JP</span><div><p class="eyebrow accent-text">STUDY WITH DIVYANSH · JEE 2028</p><h3>Make consistency your superpower.</h3><p>Build strong Class 11 foundations, practise deliberately, and learn from every mock test.</p><a class="button button-primary" href="/resources" data-route="/resources">Explore free resources <span>↗</span></a></div></div>
+      <div class="guide-grid">
+        <article class="panel guide-card"><span class="guide-number">01</span><p class="eyebrow">JEE PREPARATION TIPS</p><h3>Build a routine you can actually keep</h3><p>Set a realistic daily target, protect focused study blocks, and leave time for sleep and breaks. Increase your workload gradually rather than starting with an unsustainable schedule.</p></article>
+        <article class="panel guide-card"><span class="guide-number">02</span><p class="eyebrow">REVISION STRATEGY</p><h3>Recall first, reread second</h3><p>Close your notes and try to explain key ideas, derivations, and formulas from memory. Use the gaps you discover to guide a focused review, then revisit the chapter again later.</p></article>
+        <article class="panel guide-card"><span class="guide-number">03</span><p class="eyebrow">MOCK TESTS</p><h3>Turn every test into a learning loop</h3><p>Review incorrect answers, guessed answers, and problems that took too long. Record what you learned, and practise those specific concepts before your next attempt.</p></article>
+        <article class="panel guide-card announcement-card"><span class="announcement-dot"></span><p class="eyebrow">IMPORTANT ANNOUNCEMENTS</p><h3>Stay with official updates</h3><p>Exam dates, application windows, eligibility, and syllabus can change. Check the official NTA and JEE Advanced websites before relying on announcements shared elsewhere.</p><a href="https://jeemain.nta.nic.in/" target="_blank" rel="noopener noreferrer">NTA JEE Main official site ↗</a><a href="https://jeeadv.ac.in/" target="_blank" rel="noopener noreferrer">JEE Advanced official site ↗</a></article>
+      </div>
+    </section>
+
+    <section class="page-section route-section" id="profile">
+      <div class="section-intro"><div><p class="eyebrow accent-text">YOUR ACCOUNT</p><h2>My profile</h2><p>Manage your study identity and JEE preparation preferences.</p></div></div>
+      <article class="panel profile-panel">
+        <div class="panel-heading"><div><p class="eyebrow">STUDENT PROFILE</p><h3>Profile details</h3></div></div>
+        <form id="profile-form">
+          <label for="profile-name">Your name</label><input id="profile-name" type="text" maxlength="80" required>
+          <label for="profile-email">Email address</label><input id="profile-email" type="email" readonly aria-describedby="profile-email-hint">
+          <span class="form-hint" id="profile-email-hint">Email is managed by your secure sign-in provider.</span>
+          <label for="profile-target-date">Preparation goal</label><input id="profile-target-date" type="text" value="JEE 2028" readonly>
+          <button class="button button-primary" type="submit">Save profile <span>✓</span></button>
+        </form>
+        <button class="button button-quiet profile-signout" type="button" id="profile-signout">Sign out securely</button>
+      </article>
+    </section>
+
+    <footer class="page-footer"><span>Made with <span class="footer-heart" aria-label="love">❤️</span> by Divyansh.</span><span>JEE 2028 <i>·</i> One day at a time</span></footer>
+  </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
